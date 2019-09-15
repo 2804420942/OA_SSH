@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.oa.domain.Role" table="role">
+		<!-- 建立类中的属性与表中的主键对应 -->
+		<id name="Role_id" column="Role_id" >
+			<generator class="native"/>
+		</id>
+		
+		<!-- 建立类中的普通的属性和表的字段的对应 -->
+		<property name="Role_name" length="32" />
+		<property name="Role_desc"/>
+		<property name="Role_expe"/>
+		<property name="Role_rela"/>
+		<property name="Role_record"/>
+		<property name="Role_train"/>
+		<property name="Role_money"/>
+		<many-to-one name="Role_Dept" class="com.oa.domain.Dept" column="Dept_id" lazy="false" cascade="all"/>
+	</class>
+</hibernate-mapping>

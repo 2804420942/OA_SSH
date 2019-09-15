@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <!-- 配置Struts2的常量 -->
+    <constant name="struts.objectFactory" value="spring" /> 
+    <constant name="struts.action.extension" value="action"></constant>
+    <constant name="struts.ui.theme" value="simple"></constant>
+	<!-- 	配置action -->
+	<package name="default" extends="struts-default" namespace="/">
+		<interceptors>
+			 	 <!-- 注册拦截器 -->
+	            <interceptor name="loginInterceptor" class="com.oa.interceptor.loginInterceptor"></interceptor>
+	            <!-- 注册拦截器栈 -->
+	            <interceptor-stack name="myStack">
+	                <interceptor-ref name="loginInterceptor">
+	                    <param name="excludeMethods">login</param>
+	                </interceptor-ref>
+	                <interceptor-ref name="defaultStack"></interceptor-ref>
+	            </interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+	    <global-results>
+	          <result name="login" type="redirect" >/login.jsp</result>
+	    </global-results>
+	    <!-- 指定包中的默认拦截器栈 -->
+	    
+		<!-- 用户管理 -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="success" type="redirectAction">dept_list</result>
+			<result name="login">/login.jsp</result>
+			<result name="updateUI">/userUpdate.jsp</result>
+			<result name="update" type="redirectAction">dept_list</result>
+		</action>
+		<!-- 员工管理 -->
+		<action name="role_*" class="roleAction" method="{1}">
+			<result name="list">/index.jsp</result>
+			<result name="toList" type="redirectAction">dept_list</result>
+			<result name="addUI">/jsp/Role/roleAddUI.jsp</result>
+			<result name="updateUI" type="chain">dept_role</result>
+			<result name="update" type="redirectAction">dept_list</result>
+		</action>
+		<!-- 部门管理 -->
+		<action name="dept_*" class="deptAction" method="{1}">
+			<result name="deptList" type="chain">role_list</result>
+			<result name="deptToList" type="redirectAction">dept_list</result>
+			<result name="deptToRole">/jsp/Role/roleUpdateUI.jsp</result>
+			<result name="deptUpdateUI">/jsp/Dept/deptUpdateUI.jsp</result>
+			<result name="deptUpdate" type="redirectAction">dept_list</result>
+			<result name="deptAddUI">/jsp/Dept/deptAddUI.jsp</result>
+		</action>
+		 
+	</package>
+
+</struts>
